@@ -74,7 +74,7 @@ public class DataTypeDate implements IDataType {
     }
 
     @Override
-    public Object[] deserializeBinaryBulk(int rows, BinaryDeserializer deserializer)
+    public Object deserializeBinaryBulk(int rows, BinaryDeserializer deserializer)
         throws IOException {
         Date[] data = new Date[rows];
         for (int row = 0; row < rows; row++) {

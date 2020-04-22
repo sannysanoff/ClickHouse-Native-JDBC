@@ -9,6 +9,7 @@ import com.github.housepower.jdbc.serializer.BinaryDeserializer;
 import com.github.housepower.jdbc.serializer.BinarySerializer;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 
 public class DataTypeNullable implements IDataType {
@@ -87,13 +88,13 @@ public class DataTypeNullable implements IDataType {
     }
 
     @Override
-    public Object[] deserializeBinaryBulk(int rows, BinaryDeserializer deserializer) throws SQLException, IOException {
-        Object[] nullMap = nullMapDataType.deserializeBinaryBulk(rows, deserializer);
+    public Object deserializeBinaryBulk(int rows, BinaryDeserializer deserializer) throws SQLException, IOException {
+        Object nullMap = nullMapDataType.deserializeBinaryBulk(rows, deserializer);
 
-        Object[] data = nestedDataType.deserializeBinaryBulk(rows, deserializer);
-        for (int i = 0; i < nullMap.length; i++) {
-            if (IS_NULL.equals(nullMap[i])) {
-                data[i] = null;
+        Object data = nestedDataType.deserializeBinaryBulk(rows, deserializer);
+        for (int i = 0; i < Array.getLength( nullMap); i++) {
+            if (IS_NULL.equals(Array.get(nullMap, i))) {
+                Array.set(data, i, null);
             }
         }
         return data;

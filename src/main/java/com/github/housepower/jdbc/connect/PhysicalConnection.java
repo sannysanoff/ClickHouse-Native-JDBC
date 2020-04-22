@@ -19,6 +19,7 @@ import com.github.housepower.jdbc.settings.ClickHouseConfig;
 import com.github.housepower.jdbc.settings.ClickHouseDefines;
 import com.github.housepower.jdbc.settings.SettingKey;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -92,7 +93,16 @@ public class PhysicalConnection {
     public RequestOrResponse receiveResponse(int soTimeout, PhysicalInfo.ServerInfo info) throws SQLException {
         try {
             socket.setSoTimeout(soTimeout);
-            return RequestOrResponse.readFrom(deserializer, info);
+            long t1 = System.currentTimeMillis();
+            RequestOrResponse rv = RequestOrResponse.readFrom(deserializer, info);
+            long t2 = System.currentTimeMillis();
+            String stat = "";
+            if (rv instanceof DataResponse) {
+                DataResponse dr = (DataResponse)rv;
+                stat=""+dr.block().rows();
+            }
+//            System.out.println(System.currentTimeMillis()+" Refill time: "+(t2-t1)+" blocksize="+stat);
+            return rv;
         } catch (IOException ex) {
             throw new SQLException(ex.getMessage(), ex);
         }
@@ -115,7 +125,7 @@ public class PhysicalConnection {
 
     private void sendQuery(String id, int stage, QueryRequest.ClientInfo info, String query,
         Map<SettingKey, Object> settings) throws SQLException {
-        sendRequest(new QueryRequest(id, info, stage, true, query, settings));
+        sendRequest(new QueryRequest(id, info, stage, false, query, settings));
     }
 
     private void sendRequest(RequestOrResponse request) throws SQLException {
@@ -137,7 +147,7 @@ public class PhysicalConnection {
             socket.setReceiveBufferSize(ClickHouseDefines.SOCKET_BUFFER_SIZE);
             socket.connect(endpoint, configure.connectTimeout());
 
-            return new PhysicalConnection(socket, new BinarySerializer(new SocketBuffedWriter(socket), true), new BinaryDeserializer(socket));
+            return new PhysicalConnection(socket, new BinarySerializer(new SocketBuffedWriter(socket), false), new BinaryDeserializer(socket));
         } catch (IOException ex) {
             throw new SQLException(ex.getMessage(), ex);
         }

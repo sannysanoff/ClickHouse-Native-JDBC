@@ -138,8 +138,10 @@ public class ClickHouseResultSet extends SQLResultSet {
 
     @Override
     public long getLong(int index) throws SQLException {
-        Object data = getObject(index);
-        return ((Number) data).longValue();
+        Validate.isTrue(row >= 0 && row < current.rows(),
+                "No row information was obtained.You must call ResultSet.next() before that.");
+        Column column = (lastFetchBlock = current).getByPosition((lastFetchColumn = index - 1));
+        return column.longs((lastFetchRow = row));
     }
 
     @Override
@@ -162,8 +164,10 @@ public class ClickHouseResultSet extends SQLResultSet {
 
     @Override
     public double getDouble(int index) throws SQLException {
-        Object data = getObject(index);
-        return ((Number) data).doubleValue();
+        Validate.isTrue(row >= 0 && row < current.rows(),
+                "No row information was obtained.You must call ResultSet.next() before that.");
+        Column column = (lastFetchBlock = current).getByPosition((lastFetchColumn = index - 1));
+        return column.doubles((lastFetchRow = row));
     }
 
     @Override

@@ -2,12 +2,13 @@ package com.github.housepower.jdbc;
 
 import com.github.housepower.jdbc.wrapper.SQLArray;
 
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 
 public class ClickHouseArray extends SQLArray {
-    private final Object[] data;
+    private final Object data;
 
-    public ClickHouseArray(Object[] data) {
+    public ClickHouseArray(Object data) {
         this.data = data;
     }
 
@@ -23,7 +24,7 @@ public class ClickHouseArray extends SQLArray {
     public ClickHouseArray slice(int offset, int length) {
         Object []result = new Object[length];
         for (int i = 0 ; i < length; i ++) {
-            result[i] = data[i+offset];
+            result[i] = Array.get(data, i+offset);
         }
         return new ClickHouseArray(result);
     }

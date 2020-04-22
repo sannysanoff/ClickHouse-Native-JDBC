@@ -126,7 +126,7 @@ public class Block {
             String type = deserializer.readStringBinary();
 
             IDataType dataType = DataTypeFactory.get(type, serverInfo);
-            Object[] arr = dataType.deserializeBinaryBulk(rows, deserializer);
+            Object arr = dataType.deserializeBinaryBulk(rows, deserializer);
             cols[i] = new Column(name, dataType, arr);
         }
 

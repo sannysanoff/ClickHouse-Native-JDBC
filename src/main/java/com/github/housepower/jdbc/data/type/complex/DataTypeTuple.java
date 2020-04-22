@@ -10,6 +10,7 @@ import com.github.housepower.jdbc.serializer.BinaryDeserializer;
 import com.github.housepower.jdbc.serializer.BinarySerializer;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.sql.Struct;
 import java.sql.Types;
@@ -84,22 +85,22 @@ public class DataTypeTuple implements IDataType {
 
     @Override
     public Object[] deserializeBinaryBulk(int rows, BinaryDeserializer deserializer) throws SQLException, IOException {
-        Object[][] rowsWithElems = getRowsWithElems(rows, deserializer);
+        Object[] rowsWithElems = getRowsWithElems(rows, deserializer);
 
         Struct[] rowsData = new Struct[rows];
         for (int row = 0; row < rows; row++) {
             Object[] elemsData = new Object[nestedTypes.length];
 
             for (int elemIndex = 0; elemIndex < nestedTypes.length; elemIndex++) {
-                elemsData[elemIndex] = rowsWithElems[elemIndex][row];
+                elemsData[elemIndex] = Array.get(rowsWithElems[elemIndex], row);
             }
             rowsData[row] = new ClickHouseStruct("Tuple", elemsData);
         }
         return rowsData;
     }
 
-    private Object[][] getRowsWithElems(int rows, BinaryDeserializer deserializer) throws IOException, SQLException {
-        Object[][] rowsWithElems = new Object[nestedTypes.length][];
+    private Object[] getRowsWithElems(int rows, BinaryDeserializer deserializer) throws IOException, SQLException {
+        Object[] rowsWithElems = new Object[nestedTypes.length][];
         for (int index = 0; index < nestedTypes.length; index++) {
             rowsWithElems[index] = nestedTypes[index].deserializeBinaryBulk(rows, deserializer);
         }

@@ -1,5 +1,7 @@
 package com.github.housepower.jdbc.buffer;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -9,7 +11,7 @@ public class SocketBuffedWriter implements BuffedWriter {
     private final OutputStream out;
 
     public SocketBuffedWriter(Socket socket) throws IOException {
-        this.out = socket.getOutputStream();
+        this.out = new BufferedOutputStream(socket.getOutputStream());
     }
 
     @Override

@@ -32,6 +32,32 @@ public class Column {
         if (valuesDouble != null) return valuesDouble;
         if (valuesLong != null) return valuesLong;
         if (valuesInt != null) return valuesInt;
+        Class comp = values.getClass().getComponentType();
+        if (comp == Double.class) {
+            double[] retval = new double[Array.getLength(values)];
+            Double[] arr = (Double[])values;
+            for(int i=0; i<retval.length; i++) {
+                retval[i] = arr[i] != null ? arr[i] : Double.NaN;
+            }
+            return retval;
+        }
+        if (comp == Long.class) {
+            double[] retval = new double[Array.getLength(values)];
+            Long[] arr = (Long[])values;
+            for(int i=0; i<retval.length; i++) {
+                retval[i] = arr[i] != null ? arr[i] : Long.MIN_VALUE;
+            }
+            return retval;
+        }
+        if (comp == Integer.class) {
+            double[] retval = new double[Array.getLength(values)];
+            Integer[] arr = (Integer[]) values;
+            for (int i = 0; i < retval.length; i++) {
+                retval[i] = arr[i]!= null ? arr[i] : Integer.MIN_VALUE;
+            }
+            return retval;
+        }
+        System.out.println("WARNING: class of values: "+values.getClass().getName());
         return values;
     }
 

@@ -4,7 +4,7 @@
 
     <groupId>com.github.housepower</groupId>
     <artifactId>clickhouse-native-jdbc</artifactId>
-    <version>2.2-stable-SNAPSHOT</version>
+    <version>2.2-stable-SANNYSANOFF</version>
     <packaging>jar</packaging>
 
     <name>clickhouse-native-jdbc</name>

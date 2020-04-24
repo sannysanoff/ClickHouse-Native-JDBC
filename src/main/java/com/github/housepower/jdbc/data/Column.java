@@ -57,7 +57,9 @@ public class Column {
             }
             return retval;
         }
-        System.out.println("WARNING: class of values: "+values.getClass().getName());
+        if (!(values instanceof String[])) {
+            System.out.println("WARNING: class of values: " + values.getClass().getName());
+        }
         return values;
     }
 

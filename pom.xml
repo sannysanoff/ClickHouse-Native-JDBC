@@ -253,12 +253,12 @@
                 </executions>
             </plugin>
 
+<!--
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.20.1</version>
                 <extensions>true</extensions>
-
                 <configuration>
                     <images>
                         <image>
@@ -276,13 +276,11 @@
                                             <port>${ClickHousePort}</port>
                                         </ports>
                                     </tcp>
-
                                     <http>
                                         <url>http://127.0.0.1:${ClickHouseHTTPPort}</url>
                                         <method>GET</method>
                                         <status>200</status>
                                     </http>
-
                                     <time>50000</time>
                                 </wait>
                             </run>
@@ -307,7 +305,7 @@
                 </executions>
             </plugin>
 
-
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>

@@ -103,6 +103,7 @@
     <properties>
         <ClickHousePort>9000</ClickHousePort>
         <ClickHouseHTTPPort>8123</ClickHouseHTTPPort>
+   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     </properties>
 

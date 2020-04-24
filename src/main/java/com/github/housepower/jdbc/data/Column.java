@@ -15,9 +15,10 @@ public class Column {
     private final String name;
     private final IDataType type;
 
-    private Object values;
-    private long[] valuesLong;
-    private double[] valuesDouble;
+    Object values;
+    long[] valuesLong;
+    double[] valuesDouble;  // see also: getArray
+    int[] valuesInt;  // see also: getArray
     private ColumnWriterBuffer buffer;
     private boolean isArray;
     private List<List<Integer>> offsets;
@@ -27,12 +28,21 @@ public class Column {
         this.type = type;
     }
 
+    public Object getArray() {
+        if (valuesDouble != null) return valuesDouble;
+        if (valuesLong != null) return valuesLong;
+        if (valuesInt != null) return valuesInt;
+        return values;
+    }
+
     public Column(String name, IDataType type, Object values) {
         this.values = values;
         if (values instanceof long[]) {
             valuesLong = (long[])values;
         } else if (values instanceof double[]) {
             valuesDouble = (double[])values;
+        } else if (values instanceof int[]) {
+            valuesInt = (int[])values;
         }
         this.name = name;
         this.type = type;
@@ -64,6 +74,10 @@ public class Column {
 
     public double doubles(int rowIdx) {
         return valuesDouble[rowIdx];
+    }
+
+    public int ints(int rowIdx) {
+        return valuesInt[rowIdx];
     }
 
     public void write(Object object) throws IOException, SQLException {

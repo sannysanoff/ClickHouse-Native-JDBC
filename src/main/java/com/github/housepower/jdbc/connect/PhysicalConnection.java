@@ -46,6 +46,9 @@ public class PhysicalConnection {
             sendRequest(new PingRequest());
             for (; ; ) {
                 RequestOrResponse response = receiveResponse(soTimeout, info);
+                if (response instanceof EOFStreamResponse) {
+                    continue;
+                }
                 Validate.isTrue(response instanceof ProgressResponse || response instanceof PongResponse,
                     "Expect Pong Response.");
 

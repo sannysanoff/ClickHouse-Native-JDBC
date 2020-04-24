@@ -106,8 +106,10 @@ public class ClickHouseResultSet extends SQLResultSet {
 
     @Override
     public int getInt(int index) throws SQLException {
-        Object data = getObject(index);
-        return ((Number) data).intValue();
+        Validate.isTrue(row >= 0 && row < current.rows(),
+                "No row information was obtained.You must call ResultSet.next() before that.");
+        Column column = (lastFetchBlock = current).getByPosition((lastFetchColumn = index - 1));
+        return column.ints((lastFetchRow = row));
     }
 
     @Override
@@ -237,7 +239,7 @@ public class ClickHouseResultSet extends SQLResultSet {
         return ++row < current.rows() || (row = 0) < (current = fetchBlock()).rows();
     }
 
-    private Block fetchBlock() throws SQLException {
+    public Block fetchBlock() throws SQLException {
         while (iterator.hasNext()) {
             DataResponse next = iterator.next();
             if (next.block().rows() > 0) {

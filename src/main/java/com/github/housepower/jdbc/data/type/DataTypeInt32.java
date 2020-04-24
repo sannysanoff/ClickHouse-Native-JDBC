@@ -64,9 +64,9 @@ public class DataTypeInt32 implements IDataType {
     @Override
     public Object deserializeBinaryBulk(int rows, BinaryDeserializer deserializer)
         throws SQLException, IOException {
-        Object[] data = new Object[rows];
+        int[] data = new int[rows];
         for (int row = 0; row < rows; row++) {
-            data[row] = this.deserializeBinary(deserializer);
+            data[row] = deserializer.readInt();
         }
         return data;
     }

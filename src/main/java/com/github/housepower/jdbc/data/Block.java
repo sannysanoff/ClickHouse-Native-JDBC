@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Block {
 
-    private final Column[] columns;
+    public final Column[] columns;
     private final BlockSettings settings;
     private final Map<String, Integer> nameWithPosition;
 

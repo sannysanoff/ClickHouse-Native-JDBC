@@ -38,6 +38,6 @@ class ValuesInputFormat(pos: Int, data: String?) : InputFormat {
     }
 
     init {
-        lexer = SQLLexer(pos, data)
+        lexer = SQLLexer(pos, data!!)
     }
 }

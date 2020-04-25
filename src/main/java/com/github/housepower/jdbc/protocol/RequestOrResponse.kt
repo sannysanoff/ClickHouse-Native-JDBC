@@ -20,7 +20,8 @@ abstract class RequestOrResponse internal constructor(private val type: Protocol
     companion object {
 
         suspend fun readFrom(deserializer: BinaryDeserializer, info: ServerInfo?): RequestOrResponse {
-            return when (deserializer.readVarInt().toInt()) {
+            val rdi = deserializer.readVarInt().toInt()
+            return when (rdi) {
                 0 -> HelloResponse.readFrom(deserializer)
                 1 -> DataResponse.readFrom(deserializer, info)
                 2 -> throw ExceptionResponse.readExceptionFrom(deserializer)

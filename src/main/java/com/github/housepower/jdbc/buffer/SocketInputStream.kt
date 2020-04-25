@@ -15,7 +15,7 @@ class SocketInputStream(val sock: Socket) {
     val bb = ByteBuffer.allocate(1)
 
     suspend fun read() : Int {
-        readc.readByte().toInt() and 0xFF
+        return readc.readByte().toInt() and 0xFF
     }
 
 
@@ -25,29 +25,8 @@ class SocketInputStream(val sock: Socket) {
 
 
     suspend open fun read(b: ByteArray, off: Int, len: Int): Int {
-        return readc.readAv
-//        Objects.checkFromIndexSize(off, len, b.size)
-//        if (len == 0) {
-//            return 0
-//        }
-//        var c: Int = read()
-//        if (c == -1) {
-//            return -1
-//        }
-//        b.get(off) = c.toByte()
-//        var i: Int = 1
-//        try {
-//            while (i < len) {
-//                c = read()
-//                if (c == -1) {
-//                    break
-//                }
-//                b.get(off + i) = c.toByte()
-//                i++
-//            }
-//        } catch (ee: IOException) {
-//        }
-//        return i
+        val rd = readc.readAvailable(b, off, len);
+        return rd;
     }
 
     /**

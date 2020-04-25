@@ -10,7 +10,10 @@ import com.github.housepower.jdbc.serializer.BinaryDeserializer
 import com.github.housepower.jdbc.serializer.BinarySerializer
 import com.github.housepower.jdbc.settings.ClickHouseConfig
 import com.github.housepower.jdbc.settings.SettingKey
+import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.Socket
+import io.ktor.network.sockets.aSocket
+import kotlinx.coroutines.Dispatchers
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -126,10 +129,13 @@ class PhysicalConnection(val socket: Socket,
     }
 
     companion object {
+
+        val asm = ActorSelectorManager(Dispatchers.IO);
+
         suspend fun openPhysicalConnection(configure: ClickHouseConfig): PhysicalConnection {
             return try {
                 val endpoint: SocketAddress = InetSocketAddress(configure.address(), configure.port())
-                val socket = aSocket().tcp().connect(endpoint)
+                val socket = aSocket(asm).tcp().connect(endpoint)
 //                socket.tcpNoDelay = true
 //                socket.sendBufferSize = ClickHouseDefines.SOCKET_BUFFER_SIZE
 //                socket.receiveBufferSize = ClickHouseDefines.SOCKET_BUFFER_SIZE

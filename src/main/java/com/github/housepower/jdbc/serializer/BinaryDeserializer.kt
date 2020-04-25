@@ -13,7 +13,7 @@ class BinaryDeserializer(socket: Socket?) {
         var number = 0L
         for (i in 0..8) {
             val byt = container.get().readBinary()
-            number = number or (byt and 0x7FL) shl (7 * i)
+            number = number or ((byt and 0x7FL) shl (7 * i))
             if (byt and 0x80L == 0L) {
                 break
             }

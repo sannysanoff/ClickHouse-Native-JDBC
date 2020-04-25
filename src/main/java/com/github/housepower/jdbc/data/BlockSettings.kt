@@ -45,12 +45,12 @@ class BlockSettings(private val settings: Array<Setting?>) {
             val num = deserializer.readVarInt()
             for (setting in Setting.values()) {
                 if (setting!!.num.toLong() == num) {
-                    if (Boolean::class.java.isAssignableFrom(setting.clazz)) {
+                    if (java.lang.Boolean::class.java.isAssignableFrom(setting.clazz)) {
                         val receiveSetting = Setting(setting.num, deserializer.readBoolean())
                         val settings = readSettingsFrom(currentSize + 1, deserializer)
                         settings[currentSize - 1] = receiveSetting
                         return settings
-                    } else if (Int::class.java.isAssignableFrom(setting.clazz)) {
+                    } else if (java.lang.Integer::class.java.isAssignableFrom(setting.clazz)) {
                         val receiveSetting = Setting(setting.num, deserializer.readInt())
                         val settings = readSettingsFrom(currentSize + 1, deserializer)
                         settings[currentSize - 1] = receiveSetting

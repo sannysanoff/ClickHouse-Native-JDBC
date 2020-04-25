@@ -57,7 +57,7 @@ public class Column {
             }
             return retval;
         }
-        if (!(values instanceof String[])) {
+        if (!(values instanceof String[] || values instanceof java.sql.Timestamp[])) {
             System.out.println("WARNING: class of values: " + values.getClass().getName());
         }
         return values;

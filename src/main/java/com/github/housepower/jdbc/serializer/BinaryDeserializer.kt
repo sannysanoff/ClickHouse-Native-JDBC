@@ -3,7 +3,7 @@ package com.github.housepower.jdbc.serializer
 import com.github.housepower.jdbc.buffer.BuffedReader
 import com.github.housepower.jdbc.buffer.SocketBuffedReader
 import com.github.housepower.jdbc.misc.Container
-import kotlinx.sockets.Socket
+import io.ktor.network.sockets.Socket
 
 class BinaryDeserializer(socket: Socket?) {
     private val container: Container<BuffedReader>

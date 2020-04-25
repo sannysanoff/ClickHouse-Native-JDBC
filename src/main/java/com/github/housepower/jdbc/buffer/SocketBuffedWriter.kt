@@ -1,6 +1,7 @@
 package com.github.housepower.jdbc.buffer
 
-import kotlinx.sockets.Socket
+import io.ktor.network.sockets.Socket
+
 
 class SocketBuffedWriter(socket: Socket) : BuffedWriter {
     private val out: OutputStream = BufferedOutputStream(SocketOutputStream(socket), 8192)

@@ -1,9 +1,8 @@
 package com.github.housepower.jdbc.buffer
 
 import com.github.housepower.jdbc.settings.ClickHouseDefines
-import kotlinx.sockets.Socket
+import io.ktor.network.sockets.Socket
 import java.io.EOFException
-import java.io.IOException
 import kotlin.experimental.and
 
 class SocketBuffedReader internal constructor(private val input: SocketInputStream, private val capacity: Int) : BuffedReader {

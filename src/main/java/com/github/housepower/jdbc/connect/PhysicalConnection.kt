@@ -10,14 +10,14 @@ import com.github.housepower.jdbc.serializer.BinaryDeserializer
 import com.github.housepower.jdbc.serializer.BinarySerializer
 import com.github.housepower.jdbc.settings.ClickHouseConfig
 import com.github.housepower.jdbc.settings.SettingKey
-import kotlinx.sockets.aSocket
+import io.ktor.network.sockets.Socket
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.SocketAddress
 import java.sql.SQLException
 import java.util.*
 
-class PhysicalConnection(val socket: kotlinx.sockets.Socket,
+class PhysicalConnection(val socket: Socket,
                          val serializer: BinarySerializer,
                          val deserializer: BinaryDeserializer,
                          val address: SocketAddress) {
@@ -128,14 +128,13 @@ class PhysicalConnection(val socket: kotlinx.sockets.Socket,
     companion object {
         suspend fun openPhysicalConnection(configure: ClickHouseConfig): PhysicalConnection {
             return try {
-//                val endpoint: SocketAddress = InetSocketAddress(configure.address(), configure.port())
-//                val socket = aSocket().tcp().connect(endpoint)
+                val endpoint: SocketAddress = InetSocketAddress(configure.address(), configure.port())
+                val socket = aSocket().tcp().connect(endpoint)
 //                socket.tcpNoDelay = true
 //                socket.sendBufferSize = ClickHouseDefines.SOCKET_BUFFER_SIZE
 //                socket.receiveBufferSize = ClickHouseDefines.SOCKET_BUFFER_SIZE
 //                socket.connect(endpoint, configure.connectTimeout())
-//                PhysicalConnection(socket, BinarySerializer(SocketBuffedWriter(socket), false), BinaryDeserializer(socket), endpoint)
-                return null!!
+                PhysicalConnection(socket, BinarySerializer(SocketBuffedWriter(socket), false), BinaryDeserializer(socket), endpoint)
             } catch (ex: IOException) {
                 throw SQLException(ex.message, ex)
             }

@@ -1,31 +1,31 @@
 package com.github.housepower.jdbc.buffer
 
-import kotlinx.sockets.Socket
+import io.ktor.network.sockets.Socket
+import io.ktor.network.sockets.openReadChannel
+import io.ktor.utils.io.readAvailable
+import io.ktor.utils.io.readFully
 import java.nio.ByteBuffer
 import java.util.*
 
 
 class SocketInputStream(val sock: Socket) {
 
+    val readc = sock.openReadChannel();
+
     val bb = ByteBuffer.allocate(1)
 
     suspend fun read() : Int {
-        val rd = sock.read(bb);
-        if (rd < 1)
-            return rd;
-        return bb.get(0).toInt();
+        readc.readByte().toInt() and 0xFF
     }
 
 
     suspend open fun read(b: ByteArray): Int {
-        val bb0 = ByteBuffer.wrap(b)
-        return sock.read(bb0)
+        return readc.readAvailable(b)
     }
 
 
     suspend open fun read(b: ByteArray, off: Int, len: Int): Int {
-        val bb0 = ByteBuffer.wrap(b, off, len)
-        return sock.read(bb0)
+        return readc.readAv
 //        Objects.checkFromIndexSize(off, len, b.size)
 //        if (len == 0) {
 //            return 0

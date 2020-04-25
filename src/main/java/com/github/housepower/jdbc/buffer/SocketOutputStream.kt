@@ -1,6 +1,6 @@
 package com.github.housepower.jdbc.buffer
 
-import kotlinx.sockets.Socket
+import io.ktor.network.sockets.Socket
 import java.nio.ByteBuffer
 
 

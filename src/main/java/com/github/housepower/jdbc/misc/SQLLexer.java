@@ -6,7 +6,7 @@ public class SQLLexer {
     private int pos;
     private final char[] data;
 
-    public SQLLexer(int pos, String data) throws SQLException {
+    public SQLLexer(int pos, String data)  {
         this.pos = pos;
         this.data = data.toCharArray();
     }

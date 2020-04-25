@@ -9,16 +9,16 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class NonRegisterDriver implements Driver {
+public class NonRegisterDriver {
 
     private static final String JDBC_PREFIX = "jdbc:";
     private static final String CLICK_HOUSE_JDBC_PREFIX = JDBC_PREFIX + "clickhouse:";
 
-    public boolean acceptsURL(String url) throws SQLException {
+    public boolean acceptsURL(String url)  {
         return url.startsWith(CLICK_HOUSE_JDBC_PREFIX);
     }
 
-    public Connection connect(String url, Properties properties) throws SQLException {
+    public ClickHouseConnection connect(String url, Properties properties)  {
         if (!this.acceptsURL(url)) {
             return null;
         }

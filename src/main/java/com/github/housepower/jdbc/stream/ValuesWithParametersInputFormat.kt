@@ -8,7 +8,7 @@ import java.sql.SQLException
 class ValuesWithParametersInputFormat(query: String?, pos: Int) : InputFormat {
     private val lexer: SQLLexer
 
-    override fun fillBlock(block: Block) {
+    suspend override fun fillBlock(block: Block) {
         val constIdx = IntArray(block.columns())
         val nextChar = lexer.character()
         Validate.isTrue(nextChar == '(')

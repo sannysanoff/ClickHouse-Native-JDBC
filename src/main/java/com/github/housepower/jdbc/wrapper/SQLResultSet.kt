@@ -13,7 +13,7 @@ import java.util.*
 
 abstract class SQLResultSet {
 
-    open operator fun next(): Boolean {
+    open suspend operator fun next(): Boolean {
         throw SQLFeatureNotSupportedException()
     }
 

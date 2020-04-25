@@ -6,7 +6,7 @@ package com.github.housepower.jdbc.misc
  * 12.12.2018 16:11
  */
 interface CheckedIterator<T, E : Throwable?> {
-    operator fun hasNext(): Boolean
+    suspend operator fun hasNext(): Boolean
 
-    operator fun next(): T
+    suspend operator fun next(): T
 }

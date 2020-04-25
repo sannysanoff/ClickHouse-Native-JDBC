@@ -8,18 +8,21 @@ import java.io.IOException
 import java.sql.SQLException
 import java.util.*
 
-class Block @JvmOverloads constructor(private var rows: Int = 0, val columns: Array<Column?> = arrayOfNulls(0), private val settings: BlockSettings = BlockSettings(BlockSettings.Setting.values())) {
+class Block @JvmOverloads constructor(
+        private var rows: Int = 0,
+        val columns: Array<Column?> = arrayOfNulls(0),
+        private val settings: BlockSettings = BlockSettings(BlockSettings.Setting.values())) {
     private val nameWithPosition: MutableMap<String, Int>
     private val objects: Array<Any?>
     private val columnIndexAdds: IntArray
 
     
-    fun appendRow() {
+    suspend fun appendRow() {
         var i = 0
         try {
             i = 0
             while (i < columns.size) {
-                columns[i]!!.write(objects[i])
+                columns[i]!!.write(objects[i]!!)
                 i++
             }
             rows++
@@ -45,7 +48,7 @@ class Block @JvmOverloads constructor(private var rows: Int = 0, val columns: Ar
     }
 
     @Throws(IOException::class, SQLException::class)
-    fun writeTo(serializer: BinarySerializer) {
+    suspend fun writeTo(serializer: BinarySerializer) {
         settings.writeTo(serializer)
         serializer.writeVarInt(columns.size.toLong())
         serializer.writeVarInt(rows.toLong())
@@ -93,8 +96,8 @@ class Block @JvmOverloads constructor(private var rows: Int = 0, val columns: Ar
     companion object {
         @JvmStatic
         @Throws(IOException::class, SQLException::class)
-        fun readFrom(deserializer: BinaryDeserializer,
-                     serverInfo: ServerInfo?): Block {
+        suspend fun readFrom(deserializer: BinaryDeserializer,
+                             serverInfo: ServerInfo?): Block {
             val info = BlockSettings.readFrom(deserializer)
             val columns = deserializer.readVarInt().toInt()
             val rows = deserializer.readVarInt().toInt()

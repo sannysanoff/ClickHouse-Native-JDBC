@@ -21,7 +21,7 @@ class ClickHouseConfig {
     constructor(url: String, properties: Properties) {
         settings = parseJDBCUrl(url)
         settings!!.putAll(parseJDBCProperties(properties))
-        var obj: Any?
+        var obj: Any? = null
         port = (if (settings!!.remove(SettingKey.port).also { obj = it } == null) 9000 else if (obj as Int == -1) 9000 else obj as Int)
         address = if (settings!!.remove(SettingKey.address).also { obj = it } == null) "127.0.0.1" else obj.toString()
         password = if (settings!!.remove(SettingKey.password).also { obj = it } == null) "" else obj.toString()

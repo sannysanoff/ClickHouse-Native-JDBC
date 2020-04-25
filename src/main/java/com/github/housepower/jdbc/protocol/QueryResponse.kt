@@ -11,18 +11,18 @@ class QueryResponse // Progress
 // Extremes
 // ProfileInfo
 // EndOfStream
-(private val responseSupplier: CheckedSupplier<RequestOrResponse, SQLException>) {
+(private val responseSupplier: suspend () -> RequestOrResponse?) {
     private var header: Block? = null
     private var atEnd = false
 
     @Throws(SQLException::class)
-    fun header(): Block? {
+    suspend fun header(): Block? {
         ensureHeaderConsumed()
         return header
     }
 
     @Throws(SQLException::class)
-    private fun ensureHeaderConsumed() {
+    private suspend fun ensureHeaderConsumed() {
         if (header == null) {
             val firstDataResponse = consumeDataResponse()
             header = if (firstDataResponse != null) firstDataResponse.block() else Block()
@@ -30,9 +30,9 @@ class QueryResponse // Progress
     }
 
     @Throws(SQLException::class)
-    private fun consumeDataResponse(): DataResponse? {
+    private suspend fun consumeDataResponse(): DataResponse? {
         while (!atEnd) {
-            val response = responseSupplier.get()
+            val response = responseSupplier.invoke()
             if (response is DataResponse) {
                 return response
             } else if (response is EOFStreamResponse || response == null) {
@@ -47,14 +47,13 @@ class QueryResponse // Progress
             object : CheckedIterator<DataResponse, SQLException> {
                 var current: DataResponse? = null
 
-                @Throws(SQLException::class)
-                private fun fill(): DataResponse? {
+                private suspend fun fill(): DataResponse? {
                     ensureHeaderConsumed()
                     return@label consumeDataResponse().also { current = it }
                 }
 
                 @Throws(SQLException::class)
-                private fun drain(): DataResponse {
+                private suspend fun drain(): DataResponse {
                     if (current == null) {
                         fill()
                     }
@@ -63,13 +62,11 @@ class QueryResponse // Progress
                     return@label top
                 }
 
-                @Throws(SQLException::class)
-                override fun hasNext(): Boolean {
+                override suspend fun hasNext(): Boolean {
                     return@label current != null || fill() != null
                 }
 
-                @Throws(SQLException::class)
-                override fun next(): DataResponse {
+                suspend override fun next(): DataResponse {
                     return@label drain()
                 }
             }

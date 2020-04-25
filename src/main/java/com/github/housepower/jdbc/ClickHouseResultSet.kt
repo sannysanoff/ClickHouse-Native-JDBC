@@ -147,12 +147,12 @@ class ClickHouseResultSet(private val header: Block, private val iterator: Check
     }
 
 
-    override fun next(): Boolean {
+    override suspend fun next(): Boolean {
         return ++rowIX < current.rows() || 0.also { rowIX = it } < fetchBlock().also { current = it }.rows()
     }
 
 
-    fun fetchBlock(): Block {
+    suspend fun fetchBlock(): Block {
         while (iterator.hasNext()) {
             val next = iterator.next()
             if (next.block().rows() > 0) {

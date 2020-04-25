@@ -6,10 +6,6 @@ import com.github.housepower.jdbc.ClickHouseResultSetMetaData
 import com.github.housepower.jdbc.data.Block
 import com.github.housepower.jdbc.stream.ValuesInputFormat
 import com.github.housepower.jdbc.wrapper.SQLStatement
-import java.sql.Connection
-import java.sql.ResultSet
-import java.sql.ResultSetMetaData
-import java.sql.SQLException
 import java.util.regex.Pattern
 
 open class ClickHouseStatement(val connection: ClickHouseConnection) : SQLStatement() {
@@ -17,23 +13,24 @@ open class ClickHouseStatement(val connection: ClickHouseConnection) : SQLStatem
     @JvmField
     protected var block: Block? = null
 
-    fun execute(query: String): Boolean {
-        return executeQuery(query) != null
+    suspend fun execute(query: String): Boolean {
+        executeQuery(query)
+        return true;
     }
 
-    fun executeQuery(query: String): ClickHouseResultSet {
+    suspend fun executeQuery(query: String): ClickHouseResultSet {
         executeUpdate(query)
         return lastResultSet!!
     }
 
-    fun executeUpdate(query: String): Int {
+    suspend fun executeUpdate(query: String): Int {
         val matcher = VALUES_REGEX.matcher(query)
         if (matcher.find()) {
             lastResultSet = null
             val insertQuery = query.substring(0, matcher.end() - 1)
             block = getSampleBlock(insertQuery)
             block!!.initWriteBuffer()
-            ValuesInputFormat(matcher.end() - 1, query).fillBlock(block)
+            ValuesInputFormat(matcher.end() - 1, query).fillBlock(block!!)
             return connection.sendInsertRequest(block!!)
         }
         val response = connection.sendQueryRequest(query)
@@ -41,7 +38,7 @@ open class ClickHouseStatement(val connection: ClickHouseConnection) : SQLStatem
         return 0
     }
 
-    open fun close() {
+    open suspend fun close() {
     }
 
     fun getResultSet(): ClickHouseResultSet {
@@ -52,7 +49,7 @@ open class ClickHouseStatement(val connection: ClickHouseConnection) : SQLStatem
         return lastResultSet!!.getMetaData()
     }
 
-    fun getSampleBlock(insertQuery: String?): Block {
+    suspend fun getSampleBlock(insertQuery: String): Block {
         return connection.getSampleBlock(insertQuery)
     }
 

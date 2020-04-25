@@ -2,31 +2,25 @@ package com.github.housepower.jdbc.statement
 
 import com.github.housepower.jdbc.ClickHouseConnection
 import com.github.housepower.jdbc.ClickHouseResultSet
-import java.sql.SQLException
-import java.sql.SQLFeatureNotSupportedException
 import java.util.*
 
 class ClickHousePreparedQueryStatement private constructor(conn: ClickHouseConnection, parts: Array<String>) : AbstractPreparedStatement(conn, parts) {
     constructor(conn: ClickHouseConnection, query: String) : this(conn, splitQueryByQuestionMark(query)) {}
 
     
-    fun execute(): Boolean {
+    suspend fun execute(): Boolean {
         return execute(assembleQueryPartsAndParameters())
     }
 
-    override  fun executeUpdate(): Int {
+    override suspend fun executeUpdate(): Int {
         return executeUpdate(assembleQueryPartsAndParameters())
     }
 
-    fun executeBatch(): IntArray {
-        throw SQLFeatureNotSupportedException("")
-    }
-
-    override fun executeQuery(): ClickHouseResultSet {
+    override suspend fun executeQuery(): ClickHouseResultSet {
         return executeQuery(assembleQueryPartsAndParameters())
     }
 
-    override fun setObject(index: Int, x: Any?) {
+    override suspend fun setObject(index: Int, x: Any?) {
         paramz[index - 1] = x
     }
 

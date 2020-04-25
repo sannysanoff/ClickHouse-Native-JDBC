@@ -5,15 +5,14 @@ import com.github.housepower.jdbc.ClickHouseResultSet
 import com.github.housepower.jdbc.data.Block
 import com.github.housepower.jdbc.misc.Validate.isTrue
 import com.github.housepower.jdbc.stream.ValuesWithParametersInputFormat
-import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
 
 class ClickHousePreparedInsertStatement(private val posOfData: Int, private val fullQuery: String,
                                         conn: ClickHouseConnection?) : AbstractPreparedStatement(conn!!, null) {
-    private val insertQuery: String
+    private lateinit var insertQuery: String
     private var blockInit = false
-    private fun initBlockIfPossible() {
+    suspend fun initBlockIfPossible() : Unit {
         if (blockInit) {
             return
         }
@@ -23,11 +22,12 @@ class ClickHousePreparedInsertStatement(private val posOfData: Int, private val 
         ValuesWithParametersInputFormat(fullQuery, posOfData).fillBlock(block!!)
     }
 
-    fun execute(): Boolean {
-        return executeQuery() != null
+    suspend fun execute(): Boolean {
+        executeUpdate()
+        return true;
     }
 
-    override fun executeUpdate(): Int {
+    override suspend fun executeUpdate(): Int {
         addParameters()
         val result = connection.sendInsertRequest(block!!)
         blockInit = false
@@ -35,26 +35,25 @@ class ClickHousePreparedInsertStatement(private val posOfData: Int, private val 
         return result
     }
 
-    override fun executeQuery(): ClickHouseResultSet {
-        executeUpdate()
+    override suspend fun executeQuery(): ClickHouseResultSet {
         throw SQLException("query on insert stmt")
     }
 
-    fun addBatch() {
+    suspend fun addBatch() {
         addParameters()
     }
 
-    override fun setObject(index: Int, x: Any?) {
+    override suspend fun setObject(index: Int, x: Any?) : Unit {
         initBlockIfPossible()
         block!!.setObject(index - 1, x)
     }
 
-    private fun addParameters() {
+    private suspend fun addParameters() {
         block!!.appendRow()
     }
 
     fun clearBatch() {}
-    fun executeBatch(): IntArray {
+    suspend fun executeBatch(): IntArray {
         val rows = connection.sendInsertRequest(block!!)
         val result = IntArray(rows)
         Arrays.fill(result, -1)
@@ -64,7 +63,7 @@ class ClickHousePreparedInsertStatement(private val posOfData: Int, private val 
         return result
     }
 
-    override fun close() {
+    override suspend fun close() {
         if (blockInit) {
             // Empty insert when close.
             connection.sendInsertRequest(Block())
@@ -122,8 +121,9 @@ class ClickHousePreparedInsertStatement(private val posOfData: Int, private val 
         }
     }
 
-    init {
+    suspend fun coroInit() : ClickHousePreparedInsertStatement {
         insertQuery = fullQuery.substring(0, posOfData)
         initBlockIfPossible()
+        return this
     }
 }

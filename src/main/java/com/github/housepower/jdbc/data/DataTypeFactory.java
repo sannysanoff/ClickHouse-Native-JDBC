@@ -9,8 +9,6 @@ import com.github.housepower.jdbc.data.type.DataTypeInt32;
 import com.github.housepower.jdbc.data.type.DataTypeInt64;
 import com.github.housepower.jdbc.data.type.DataTypeInt8;
 import com.github.housepower.jdbc.data.type.DataTypeString;
-import com.github.housepower.jdbc.data.type.DataTypeUUID;
-import com.github.housepower.jdbc.data.type.complex.*;
 import com.github.housepower.jdbc.misc.SQLLexer;
 import com.github.housepower.jdbc.misc.StringView;
 import com.github.housepower.jdbc.misc.Validate;
@@ -36,24 +34,24 @@ public class DataTypeFactory {
 
         if (dataTypeName.equals("Date")) {
             return DataTypeDate.createDateType(lexer, serverInfo);
-        } else if (dataTypeName.equals("Tuple")) {
-            return DataTypeTuple.createTupleType(lexer, serverInfo);
-        } else if (dataTypeName.equals("Array")) {
-            return DataTypeArray.createArrayType(lexer, serverInfo);
-        } else if (dataTypeName.equals("Enum8")) {
-            return DataTypeEnum8.createEnum8Type(lexer, serverInfo);
-        } else if (dataTypeName.equals("Enum16")) {
-            return DataTypeEnum16.createEnum16Type(lexer, serverInfo);
-        } else if (dataTypeName.equals("DateTime")) {
-            return DataTypeDateTime.createDateTimeType(lexer, serverInfo);
-        } else if (dataTypeName.equals("DateTime64")) {
-            return DataTypeDateTime64.createDateTime64Type(lexer, serverInfo);
-        } else if (dataTypeName.equals("Nullable")) {
-            return DataTypeNullable.createNullableType(lexer, serverInfo);
-        } else if (dataTypeName.equals("FixedString")) {
-            return DataTypeFixedString.createFixedStringType(lexer, serverInfo);
-        } else if (dataTypeName.equals("Decimal")) {
-            return DataTypeDecimal.createDecimalType(lexer, serverInfo);
+//        } else if (dataTypeName.equals("Tuple")) {
+//            return DataTypeTuple.createTupleType(lexer, serverInfo);
+//        } else if (dataTypeName.equals("Array")) {
+//            return DataTypeArray.createArrayType(lexer, serverInfo);
+//        } else if (dataTypeName.equals("Enum8")) {
+//            return DataTypeEnum8.createEnum8Type(lexer, serverInfo);
+//        } else if (dataTypeName.equals("Enum16")) {
+//            return DataTypeEnum16.createEnum16Type(lexer, serverInfo);
+//        } else if (dataTypeName.equals("DateTime")) {
+//            return DataTypeDateTime.createDateTimeType(lexer, serverInfo);
+//        } else if (dataTypeName.equals("DateTime64")) {
+//            return DataTypeDateTime64.createDateTime64Type(lexer, serverInfo);
+//        } else if (dataTypeName.equals("Nullable")) {
+//            return DataTypeNullable.createNullableType(lexer, serverInfo);
+//        } else if (dataTypeName.equals("FixedString")) {
+//            return DataTypeFixedString.createFixedStringType(lexer, serverInfo);
+//        } else if (dataTypeName.equals("Decimal")) {
+//            return DataTypeDecimal.createDecimalType(lexer, serverInfo);
         } else {
             String name = String.valueOf(dataTypeName);
             IDataType dataType = dataTypes.get(name);
@@ -65,7 +63,6 @@ public class DataTypeFactory {
     private static Map<String, IDataType> initialDataTypes() {
         Map<String, IDataType> creators = new HashMap<String, IDataType>();
 
-        creators.put("UUID", new DataTypeUUID());
         creators.put("String", new DataTypeString());
         creators.put("Float32", new DataTypeFloat32());
         creators.put("Float64", new DataTypeFloat64());

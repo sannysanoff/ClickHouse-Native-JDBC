@@ -16,51 +16,51 @@ abstract class AbstractPreparedStatement(connection: ClickHouseConnection, priva
 
     protected var paramz: Array<Any?> = arrayOfNulls(0)
 
-    fun setInt(index: Int, x: Int) {
+    suspend fun setInt(index: Int, x: Int) {
         setObject(index, x)
     }
 
-    fun setByte(index: Int, x: Byte) {
+    suspend fun setByte(index: Int, x: Byte) {
         setObject(index, x)
     }
 
-    fun setLong(index: Int, x: Long) {
+    suspend fun setLong(index: Int, x: Long) {
         setObject(index, x)
     }
 
-    fun setDate(index: Int, x: Date) {
+    suspend fun setDate(index: Int, x: Date) {
         setObject(index, x)
     }
 
-    fun setShort(index: Int, x: Short) {
+    suspend fun setShort(index: Int, x: Short) {
         setObject(index, x)
     }
 
-    fun setFloat(index: Int, x: Float) {
+    suspend fun setFloat(index: Int, x: Float) {
         setObject(index, x)
     }
 
-    fun setArray(index: Int, x: java.sql.Array) {
+    suspend fun setArray(index: Int, x: java.sql.Array) {
         setObject(index, x)
     }
 
-    fun setNull(index: Int, type: Int) {
+    suspend fun setNull(index: Int, type: Int) {
         setObject(index, null)
     }
 
-    fun setDouble(index: Int, x: Double) {
+    suspend fun setDouble(index: Int, x: Double) {
         setObject(index, x)
     }
 
-    fun setString(index: Int, x: String) {
+    suspend fun setString(index: Int, x: String) {
         setObject(index, x)
     }
 
-    fun setTimestamp(index: Int, x: Timestamp) {
+    suspend fun setTimestamp(index: Int, x: Timestamp) {
         setObject(index, x)
     }
 
-    fun setBigDecimal(index: Int, x: BigDecimal) {
+    suspend fun setBigDecimal(index: Int, x: BigDecimal) {
         setObject(index, x)
     }
 
@@ -134,10 +134,10 @@ abstract class AbstractPreparedStatement(connection: ClickHouseConnection, priva
         return false
     }
 
-    abstract fun executeUpdate(): Int;
-    abstract fun executeQuery(): ClickHouseResultSet;
+    abstract suspend fun executeUpdate(): Int;
+    abstract suspend fun executeQuery(): ClickHouseResultSet;
 
-    inline fun <R> use(block: (AbstractPreparedStatement) -> R): R {
+    suspend inline fun <R> use(block: suspend (AbstractPreparedStatement) -> R): R {
         try {
             val rv = block(this)
             return rv;
@@ -147,7 +147,7 @@ abstract class AbstractPreparedStatement(connection: ClickHouseConnection, priva
     }
 
 
-    abstract fun setObject(index: Int, x: Any?);
+    abstract suspend fun setObject(index: Int, x: Any?);
 
     init {
         if (queryParts != null && queryParts.size > 0) paramz = arrayOfNulls(queryParts.size)

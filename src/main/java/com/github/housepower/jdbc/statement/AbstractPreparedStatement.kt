@@ -137,7 +137,7 @@ abstract class AbstractPreparedStatement(connection: ClickHouseConnection, priva
     abstract suspend fun executeUpdate(): Int;
     abstract suspend fun executeQuery(): ClickHouseResultSet;
 
-    suspend inline fun <R> use(block: suspend (AbstractPreparedStatement) -> R): R {
+    suspend fun <R> use(block: suspend (AbstractPreparedStatement) -> R): R {
         try {
             val rv = block(this)
             return rv;

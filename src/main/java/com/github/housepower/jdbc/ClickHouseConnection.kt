@@ -149,7 +149,7 @@ class ClickHouseConnection protected constructor(configure: ClickHouseConfig, in
     private fun getPhysicalConnection() = atomicInfo.get().connection()
 
     companion object {
-        private val VALUES_REGEX = Pattern.compile("[V|v][A|a][L|l][U|u][E|e][S|s]\\s*\\(")
+        val VALUES_REGEX = Pattern.compile("[V|v][A|a][L|l][U|u][E|e][S|s]\\s*\\(")
 
         @JvmStatic
 

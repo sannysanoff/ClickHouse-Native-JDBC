@@ -30,8 +30,8 @@ object DataTypeFactory {
 //            return DataTypeEnum8.createEnum8Type(lexer, serverInfo);
 //        } else if (dataTypeName.equals("Enum16")) {
 //            return DataTypeEnum16.createEnum16Type(lexer, serverInfo);
-//        } else if (dataTypeName.equals("DateTime")) {
-//            return DataTypeDateTime.createDateTimeType(lexer, serverInfo);
+        } else if (dataTypeName.equals("DateTime")) {
+            return DataTypeDateTime.createDateTimeType(lexer, serverInfo!!);
 //        } else if (dataTypeName.equals("DateTime64")) {
 //            return DataTypeDateTime64.createDateTime64Type(lexer, serverInfo);
 //        } else if (dataTypeName.equals("Nullable")) {

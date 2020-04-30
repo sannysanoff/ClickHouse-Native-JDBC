@@ -146,6 +146,9 @@ abstract class AbstractPreparedStatement(connection: ClickHouseConnection, priva
         }
     }
 
+    open suspend fun addBatch() : Unit = throw NotImplementedError()
+    open suspend fun executeBatch(): IntArray = throw NotImplementedError()
+
 
     abstract suspend fun setObject(index: Int, x: Any?);
 

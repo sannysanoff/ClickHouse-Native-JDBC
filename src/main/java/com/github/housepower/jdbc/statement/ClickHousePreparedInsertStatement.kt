@@ -39,7 +39,7 @@ class ClickHousePreparedInsertStatement(private val posOfData: Int, private val 
         throw SQLException("query on insert stmt")
     }
 
-    suspend fun addBatch() {
+    override suspend fun addBatch() : Unit {
         addParameters()
     }
 
@@ -52,8 +52,10 @@ class ClickHousePreparedInsertStatement(private val posOfData: Int, private val 
         block!!.appendRow()
     }
 
-    fun clearBatch() {}
-    suspend fun executeBatch(): IntArray {
+    fun clearBatch() {
+
+    }
+    override suspend fun executeBatch(): IntArray {
         val rows = connection.sendInsertRequest(block!!)
         val result = IntArray(rows)
         Arrays.fill(result, -1)

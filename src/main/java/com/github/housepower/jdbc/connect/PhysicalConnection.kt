@@ -121,7 +121,8 @@ class PhysicalConnection(val socket: Socket,
 
     private suspend fun sendRequest(request: RequestOrResponse) {
         try {
-            println("ClickHouse: Sending: ${request.javaClass}")
+            val txt = request.toString()
+            println("ClickHouse: Sending: ${request.javaClass}: hash=${request.hashCode()} : ${txt}" )
             request.writeTo(serializer)
             serializer.flushToTarget(true)
             println("ClickHouse: Flushed after: ${request.javaClass}")

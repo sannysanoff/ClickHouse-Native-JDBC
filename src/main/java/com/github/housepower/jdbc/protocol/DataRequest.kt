@@ -3,9 +3,19 @@ package com.github.housepower.jdbc.protocol
 import com.github.housepower.jdbc.data.Block
 import com.github.housepower.jdbc.serializer.BinarySerializer
 import java.io.IOException
+import java.lang.Exception
 import java.sql.SQLException
+import java.util.concurrent.atomic.AtomicInteger
 
 class DataRequest @JvmOverloads constructor(val name: String, val block: Block = Block()) : RequestOrResponse(ProtocolType.REQUEST_DATA) {
+
+
+
+    init {
+        val sequence = seq.incrementAndGet();
+        println("${sequence}: DataRequest: thread="+Thread.currentThread());
+        Exception("${sequence}: NOT an exception").printStackTrace();
+    }
     override suspend fun writeImpl(serializer: BinarySerializer) {
         serializer!!.writeStringBinary(name)
         serializer!!.maybeEnableCompressed()
@@ -15,6 +25,7 @@ class DataRequest @JvmOverloads constructor(val name: String, val block: Block =
 
     companion object {
         val EMPTY = DataRequest("")
+        val seq = AtomicInteger(0);
     }
 
     override fun toString(): String {

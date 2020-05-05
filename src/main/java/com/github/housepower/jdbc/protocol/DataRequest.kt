@@ -7,12 +7,16 @@ import java.lang.Exception
 import java.sql.SQLException
 import java.util.concurrent.atomic.AtomicInteger
 
+val dataRequestSeq = AtomicInteger(0);
+
 class DataRequest @JvmOverloads constructor(val name: String, val block: Block = Block()) : RequestOrResponse(ProtocolType.REQUEST_DATA) {
 
-
+    companion object {
+        val EMPTY = DataRequest("")
+    }
 
     init {
-        val sequence = seq.incrementAndGet();
+        val sequence = dataRequestSeq.incrementAndGet();
         println("${sequence}: DataRequest: thread="+Thread.currentThread());
         Exception("${sequence}: NOT an exception").printStackTrace();
     }
@@ -21,11 +25,6 @@ class DataRequest @JvmOverloads constructor(val name: String, val block: Block =
         serializer!!.maybeEnableCompressed()
         block.writeTo(serializer)
         serializer!!.maybeDisableCompressed()
-    }
-
-    companion object {
-        val EMPTY = DataRequest("")
-        val seq = AtomicInteger(0);
     }
 
     override fun toString(): String {

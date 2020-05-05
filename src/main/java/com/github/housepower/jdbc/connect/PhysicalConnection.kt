@@ -121,8 +121,10 @@ class PhysicalConnection(val socket: Socket,
 
     private suspend fun sendRequest(request: RequestOrResponse) {
         try {
+            println("ClickHouse: Sending: ${request.javaClass}")
             request.writeTo(serializer)
             serializer.flushToTarget(true)
+            println("ClickHouse: Flushed after: ${request.javaClass}")
         } catch (ex: IOException) {
             throw SQLException(ex.message, ex)
         }

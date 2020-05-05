@@ -20,8 +20,10 @@ abstract class RequestOrResponse internal constructor(private val type: Protocol
     companion object {
 
         suspend fun readFrom(deserializer: BinaryDeserializer, info: ServerInfo?): RequestOrResponse {
+            println("ClickHouse: Receiving any..")
             val rdi = deserializer.readVarInt().toInt()
-            return when (rdi) {
+            println("ClickHouse: Received type ${rdi}. reading...")
+            val retval = when (rdi) {
                 0 -> HelloResponse.readFrom(deserializer)
                 1 -> DataResponse.readFrom(deserializer, info)
                 2 -> throw ExceptionResponse.readExceptionFrom(deserializer)
@@ -33,6 +35,8 @@ abstract class RequestOrResponse internal constructor(private val type: Protocol
                 8 -> ExtremesResponse.readFrom(deserializer, info)
                 else -> throw IllegalStateException("Accept the id of response that is not recognized by Server.")
             }
+            println("ClickHouse: Received class ${retval.javaClass}.")
+            return retval;
         }
 
         private fun isPingResult(type: ProtocolType, deserializer: BinaryDeserializer): Boolean {

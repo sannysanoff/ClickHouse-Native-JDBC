@@ -15,6 +15,7 @@ open class NonRegisterDriver {
 
     suspend fun connect(url: String, properties: Properties?): ClickHouseConnection? {
         if (!acceptsURL(url)) {
+            println("Not accepting url: $url")
             return null
         }
         val configure = ClickHouseConfig(url, properties!!)

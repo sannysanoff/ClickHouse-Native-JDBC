@@ -16,9 +16,9 @@ class DataRequest @JvmOverloads constructor(val name: String, val block: Block =
     }
 
     init {
-        val sequence = dataRequestSeq.incrementAndGet();
-        println("${sequence}: DataRequest: thread="+Thread.currentThread());
-        Exception("${sequence}: NOT an exception").printStackTrace();
+//        val sequence = dataRequestSeq.incrementAndGet();
+//        println("${sequence}: DataRequest: thread="+Thread.currentThread());
+//        Exception("${sequence}: NOT an exception").printStackTrace();
     }
     override suspend fun writeImpl(serializer: BinarySerializer) {
         serializer!!.writeStringBinary(name)

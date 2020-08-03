@@ -51,10 +51,10 @@ class BinaryDeserializer(socket: Socket?) {
         container.get().readBinary(ba)
         var off = 0;
         for (row in 0 until dest.size) {
-            dest[row] = ((ba[off+0].toLong() and 0xFF) + (ba[off+1].toLong() and 0xFF shl 8)
-                    + (ba[off+2].toLong() and 0xFF shl 16) + (ba[off+3].toLong() and 0xFF shl 24)
-                    + (ba[off+4].toLong() and 0xFF shl 32) + (ba[off+5].toLong() and 0xFF shl 40)
-                    + (ba[off+6].toLong() and 0xFF shl 48) + (ba[off+7].toLong() and 0xFF shl 56))
+            dest[row] = ((ba[off + 0].toLong() and 0xFF) + (ba[off + 1].toLong() and 0xFF shl 8)
+                    + (ba[off + 2].toLong() and 0xFF shl 16) + (ba[off + 3].toLong() and 0xFF shl 24)
+                    + (ba[off + 4].toLong() and 0xFF shl 32) + (ba[off + 5].toLong() and 0xFF shl 40)
+                    + (ba[off + 6].toLong() and 0xFF shl 48) + (ba[off + 7].toLong() and 0xFF shl 56))
             off += 8
         }
     }
@@ -101,6 +101,20 @@ class BinaryDeserializer(socket: Socket?) {
                         + (container.get().readBinary() and 0xFFL shl 48)
                         + (container.get().readBinary() and 0xFFL shl 56))
         )
+    }
+
+    suspend fun readDoubles(dest: DoubleArray): Double {
+        val ba = ByteArray(dest.size * 8)
+        container.get().readBinary(ba)
+        var off = 0;
+        for (row in 0 until dest.size) {
+            val l = ((ba[off + 0].toLong() and 0xFF) + (ba[off + 1].toLong() and 0xFF shl 8)
+                    + (ba[off + 2].toLong() and 0xFF shl 16) + (ba[off + 3].toLong() and 0xFF shl 24)
+                    + (ba[off + 4].toLong() and 0xFF shl 32) + (ba[off + 5].toLong() and 0xFF shl 40)
+                    + (ba[off + 6].toLong() and 0xFF shl 48) + (ba[off + 7].toLong() and 0xFF shl 56))
+            dest[row] = java.lang.Double.longBitsToDouble(l);
+            off += 8;
+        }
     }
 
 

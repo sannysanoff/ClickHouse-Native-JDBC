@@ -91,15 +91,16 @@ class BinaryDeserializer(socket: Socket?) {
 
 
     suspend fun readDouble(): Double {
+        val cont = container.get()
         return java.lang.Double.longBitsToDouble(
-                ((container.get().readBinary() and 0xFFL)
-                        + (container.get().readBinary() and 0xFFL shl 8)
-                        + (container.get().readBinary() and 0xFFL shl 16)
-                        + (container.get().readBinary() and 0xFFL shl 24)
-                        + (container.get().readBinary() and 0xFFL shl 32)
-                        + (container.get().readBinary() and 0xFFL shl 40)
-                        + (container.get().readBinary() and 0xFFL shl 48)
-                        + (container.get().readBinary() and 0xFFL shl 56))
+                ((cont.readBinary() and 0xFFL)
+                        + (cont.readBinary() and 0xFFL shl 8)
+                        + (cont.readBinary() and 0xFFL shl 16)
+                        + (cont.readBinary() and 0xFFL shl 24)
+                        + (cont.readBinary() and 0xFFL shl 32)
+                        + (cont.readBinary() and 0xFFL shl 40)
+                        + (cont.readBinary() and 0xFFL shl 48)
+                        + (cont.readBinary() and 0xFFL shl 56))
         )
     }
 

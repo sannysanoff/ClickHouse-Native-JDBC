@@ -47,9 +47,7 @@ class DataTypeInt64(private val name: String) : IDataType {
     
     override suspend fun deserializeBinaryBulk(rows: Int, deserializer: BinaryDeserializer): Any {
         val data = LongArray(rows)
-        for (row in 0 until rows) {
-            data[row] = deserializer.readLong()
-        }
+        deserializer.readLongs(data)
         return data
     }
 

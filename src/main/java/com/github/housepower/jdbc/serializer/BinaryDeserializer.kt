@@ -103,7 +103,7 @@ class BinaryDeserializer(socket: Socket?) {
         )
     }
 
-    suspend fun readDoubles(dest: DoubleArray): Double {
+    suspend fun readDoubles(dest: DoubleArray) {
         val ba = ByteArray(dest.size * 8)
         container.get().readBinary(ba)
         var off = 0;

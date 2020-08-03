@@ -42,7 +42,7 @@ class DataTypeFloat64 : IDataType {
     
     override suspend fun deserializeBinaryBulk(rows: Int, deserializer: BinaryDeserializer): Any {
         val data = DoubleArray(rows)
-        deserializer.readDoubles(rows);
+        deserializer.readDoubles(data)
         return data
     }
 

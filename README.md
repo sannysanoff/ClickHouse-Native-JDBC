@@ -4,6 +4,8 @@
 This is a FORK of original ClickHouse-Native-JDBC found on github and written in java. 
 For readme of original package, see previous version of this README.
 
+The JDBC keyword in a project name is a lie. No JDBC here.
+
 Goal of fork is:
 
 - to enable async io in kotlin, not using plain old sockets

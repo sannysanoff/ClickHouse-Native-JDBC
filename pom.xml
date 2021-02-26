@@ -16,7 +16,7 @@
         <ClickHouseHTTPPort>8123</ClickHouseHTTPPort>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <kotlin.version>1.3.70</kotlin.version>
+        <kotlin.version>1.4.30</kotlin.version>
     </properties>
     <scm>
         <url>https://github.com/housepower/ClickHouse-Native-JDBC</url>
@@ -132,7 +132,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>
@@ -418,12 +418,6 @@
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/test/java</source>
-                                <source>target/generated-test-sources/test-annotations</source>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                 </executions>
                 <configuration>

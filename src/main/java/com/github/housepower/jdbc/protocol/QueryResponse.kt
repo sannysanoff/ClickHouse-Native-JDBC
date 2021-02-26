@@ -43,13 +43,13 @@ class QueryResponse // Progress
     }
 
     fun data(): Supplier<CheckedIterator<DataResponse, SQLException>> {
-        return label@ Supplier {
+        return Supplier {
             object : CheckedIterator<DataResponse, SQLException> {
                 var current: DataResponse? = null
 
                 private suspend fun fill(): DataResponse? {
                     ensureHeaderConsumed()
-                    return@label consumeDataResponse().also { current = it }
+                    return consumeDataResponse().also { current = it }
                 }
 
                 @Throws(SQLException::class)
@@ -59,15 +59,15 @@ class QueryResponse // Progress
                     }
                     val top = current
                     current = null
-                    return@label top
+                    return top!!
                 }
 
                 override suspend fun hasNext(): Boolean {
-                    return@label current != null || fill() != null
+                    return current != null || fill() != null
                 }
 
                 suspend override fun next(): DataResponse {
-                    return@label drain()
+                    return drain()
                 }
             }
         }

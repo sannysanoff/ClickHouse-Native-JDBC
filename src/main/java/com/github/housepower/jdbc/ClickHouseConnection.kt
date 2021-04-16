@@ -47,7 +47,27 @@ class ClickHouseConnection protected constructor(configure: ClickHouseConfig, in
         return ClickHouseStatement(this)
     }
 
+    val LOG = (System.getenv("CLICKHOUSE_LOGGING") ?: "")
+
     suspend fun prepareStatement(query: String): AbstractPreparedStatement {
+        if (LOG == "ALL" || (LOG == "SOME" && !query.contains("log_queries=0"))) {
+            println("clickhouse-client -h ${
+                this.configure.address()
+            } -d ${
+                this.configure.database()
+            } --user \"${
+                this.configure.username()
+            }\" --password \"${
+                this.configure.password()
+            }\" --query \"${
+                query.lineSequence()
+                    .filter { it.isNotEmpty() }
+                    .joinToString(" ") { 
+                        it.trim().replace("\"", "\\\"")
+                    }
+            }\"")
+        }
+
         Validate.isTrue(!isClosed(), "Unable to create PreparedStatement, because the connection is closed.")
         val matcher = VALUES_REGEX.matcher(query)
         return if (matcher.find())
